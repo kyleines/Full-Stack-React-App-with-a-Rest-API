@@ -1,9 +1,14 @@
 import React from "react";
-import {BrowserRouter} from "react-router-dom"
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+} from "react-router-dom"
 
 // import components
 import Header from "./Header";
 import Courses from "./Courses";
+import CourseDetail from "./CourseDetail";
 
 // main container component
 function App() {
@@ -11,7 +16,17 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Courses />
+
+      <Switch>
+        <Route exact path="/">
+          <Courses />
+        </Route>
+
+        <Route exact path="/courses/:id">
+          <CourseDetail />
+        </Route>
+      </Switch>
+
     </BrowserRouter>
   );
 }
