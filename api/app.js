@@ -1,24 +1,9 @@
-/************************************************
-Treehouse FSJS Techdegree:
-Project 9 - School Database REST API
-************************************************/
-
-/*
-Dear Reviewer,
-I appreciate you for taking the time to review my project! 
-Your feedback is important to me and crucial to my growth as a developer.
-With the following code I hope to earn the "Exceeds Expectations" grade, and 
-I humbly request that you reject my submission if I don't meet those requirements.
-
-Thank you again!
--Kyle
-*/
-
 'use strict';
 
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const cors = require("cors");
 
 // import sequelize instance
 const db = require("./models/index");
@@ -31,6 +16,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 
 // create the Express app
 const app = express();
+
+// enable cors requests
+app.use(cors());
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
