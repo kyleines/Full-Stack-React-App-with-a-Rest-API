@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from "react";
-import axios from "axios";
+import React, {useState, useEffect, useContext} from "react";
+import Context from "../Context";
 
 const Courses = () => {
+
+    const context = useContext(Context.AppContext);
 
     const [coursesArray, setCoursesArray] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/courses")
-            .then(res => setCoursesArray(res.data))
-    }, []);
+        context.data.getCourses()
+            .then(data => setCoursesArray(data));
+    }, [context.data]);
 
     let courses = coursesArray.map((course, index) => (
         <a key={index} className="course--module course--link" href={`/courses/${course.id}`}>
