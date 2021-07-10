@@ -128,10 +128,18 @@ router.get("/courses/:id", asyncHandler(async (req, res) => {
 router.post("/courses", authenticateUser, asyncHandler(async (req, res) => {
     try {
         await Course.create(req.body);
-        const courses = await Course.findAll();
+        const course = await Course.findOne({
+            where: {
+                userId: req.body.userId
+            },
+            order:[
+                ["createdAt", "DESC"]
+            ],
+        });
+
         res
             .status(201)
-            .location(`/api/courses/${courses.length}`)
+            .set("Location", `/api/courses/${course.id}`)
             .end();
 
     } catch (error) {
