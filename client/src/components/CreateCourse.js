@@ -1,12 +1,20 @@
+
+// import modules
 import React, {useState, useContext} from "react";
 import {useHistory} from "react-router-dom";
 import Context from "../Context";
 
+// import component
+import ValidationErrors from "./ValidationErrors";
+
+// handles course creation
 const CreateCourse = () => {
 
+    // data
     const context = useContext(Context.AppContext);
     const signedIn = context.authedUser;
 
+    // url manipulation
     const history = useHistory();
 
     // minimum data necessary for course creation
@@ -21,25 +29,22 @@ const CreateCourse = () => {
     // errors array for field validation
     const [errors, setErrors] = useState([]);
 
+    // sets state from html input fields
     const change = (e) => {
         const value = e.target.value;
 
         switch (e.target.name) {
             case "courseTitle":
                 setTitle(value);
-                console.log(value)
                 break;
             case "courseDescription":
                 setDescription(value);
-                console.log(value)
                 break;
             case "estimatedTime":
                 setTime(value);
-                console.log(value)
                 break;
             case "materialsNeeded":
                 setMaterials(value);
-                console.log(value)
                 break;
             default:
                 return;
@@ -49,6 +54,7 @@ const CreateCourse = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // course data to be persisted to database
         const course = {
             title,
             description,
@@ -57,21 +63,26 @@ const CreateCourse = () => {
             userId
         };
 
+        // course creation restricted to authenticated users only
         if (signedIn) {
+            // posts data to database
             context.data.createCourse(course, signedIn.emailAddress, signedIn.password)
                 .then(errors => {
                     if (errors.length) {
                         setErrors(errors);
                     } else {
                         context.data.getCourses()
-                            .then(res => {
-                                history.push(`/courses/${res.length}`);
-                            });
+                            .then(courses => {
+                                let newCourse = courses[courses.length -1];
+                                history.push("/courses/" + newCourse.id)
+                            })
                     }
                 })
+                .catch(() => history.push("/error"))
         }
     }
 
+    // returns user to home "/" route
     const handleCancel = (e) => {
         e.preventDefault();
         history.push("/");
@@ -81,7 +92,7 @@ const CreateCourse = () => {
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
-                <ErrorsDisplay errors={errors} />
+                <ValidationErrors errors={errors} />
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         <div>
@@ -109,24 +120,3 @@ const CreateCourse = () => {
     );
 }
 export default CreateCourse;
-
-const ErrorsDisplay = ({errors}) => {
-    let errorsDisplay = null;
-
-    if (errors.length) {
-        errorsDisplay = (
-            <div className="validation--errors">
-                <h3>Validation errors</h3>
-                <ul>
-                    {errors.map((error, i) => {
-                        return (
-                            <li key={i}>{error}</li>
-                        );
-                    })}
-                </ul>
-            </div>
-        );
-    }
-
-    return errorsDisplay;
-}
