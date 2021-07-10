@@ -1,9 +1,13 @@
+
+// import modules
 import React, {useContext} from "react";
 import {Route, Redirect} from "react-router-dom";
 import Context from "../Context";
 
+// wraps routes to restrict access from unauthenticated users
 const PrivateRoute = ({component: Component, ...rest}) => {
 
+    // data
     const context = useContext(Context.AppContext);
 
     return (
@@ -12,7 +16,10 @@ const PrivateRoute = ({component: Component, ...rest}) => {
             render={props => context.authedUser ? (
                 <Component {...props} />
             ) : (
-                <Redirect to="/signin" />
+                <Redirect to={{
+                pathname: '/signin',
+                state: { from: props.location }
+              }} />
             )}
         />
     );
