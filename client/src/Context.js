@@ -1,9 +1,15 @@
+
+// import modules
 import React, {Component} from "react";
-import Data from "./Data";
 import Cookies from "js-cookie";
 
+// import api request methods
+import Data from "./Data";
+
+// create context instance using the Context API
 export const AppContext = React.createContext();
 
+// provides context
 export class Provider extends Component {
 
     constructor() {
@@ -33,12 +39,19 @@ export class Provider extends Component {
         );
     }
 
+    // method authenticates current existing user.
+    // persists credentials in global state.
+    // sets cookie
     signIn = async (emailAddress, password) => {
         const user = await this.data.getUser(emailAddress, password);
 
         if (user !== null) {
             this.setState(() => {
-                return {authedUser: user}
+                user.emailAddress = emailAddress;
+                user.password = password;
+                return {
+                    authedUser: user
+                }
             });
 
             Cookies.set(
@@ -51,28 +64,18 @@ export class Provider extends Component {
         return user;
     }
 
-    signOut() {
+    // removes current user's credentials from state.
+    // removes cookie
+    signOut = () => {
         this.setState(() => {
-            return {
-                authedUser: null,
-            }
+            return {authedUser: null}
         });
 
         Cookies.remove("authedUser");
     }
 }
+
 export const Consumer = AppContext.Consumer;
 
-
-// context wrapper
-export function withContext(Component) {
-    return function ContextComponent(props) {
-        return (
-            <AppContext.Consumer>
-                {context => <Component {...props} context={context} />}
-            </AppContext.Consumer>
-        );
-    }
-}
-
-export default {withContext, AppContext};
+// eslint-disable-next-line
+export default {AppContext};
