@@ -1,19 +1,30 @@
+
+// import modules
 import React, {useState, useContext} from "react";
 import {Link, useHistory} from "react-router-dom";
+import ValidationErrors from "./ValidationErrors";
 import Context from "../Context";
 
+// displays form for new user creation
 const UserSignUp = () => {
 
+    // data
     const context = useContext(Context.AppContext);
+
+    // url manipulation
     const history = useHistory();
 
+    // state variables
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    // errors array for field validation
     const [errors, setErrors] = useState([]);
 
+    // sets state from html input fields
     const change = (e) => {
         const value = e.target.value;
 
@@ -41,6 +52,7 @@ const UserSignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // user data to be persisted to database
         const user = {
             firstName,
             lastName,
@@ -48,31 +60,31 @@ const UserSignUp = () => {
             password,
         };
 
+        // password confirmation
         if (confirmPassword !== password) {
             setErrors(["Passwords do not match"]);
         } else {
+            // posts data to database
             context.data.createUser(user)
                 .then(errors => {
                     if (errors.length) {
                         setErrors(errors);
                     } else {
+                        // signs in new user
                         context.actions.signIn(emailAddress, password)
                             .then(() => {
-                                history.push("/");
-                                console.log("Sign-up was successful!")
+                                const {from} = history.location.state || {from: history.goBack()};
+                                history.push(from);
                             });
                     }
                 })
-                .catch(error => {
-                    console.log(error);
-                    history.push("/error");
-                });
+                .catch(() => history.push("/error"));
         }
     }
 
+    // returns users to default "/" route
     const handleCancel = (e) => {
         e.preventDefault();
-        console.log(context)
         history.push("/");
     }
 
@@ -80,7 +92,7 @@ const UserSignUp = () => {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                <ErrorsDisplay errors={errors} />
+                <ValidationErrors errors={errors} />
                 <form onSubmit={handleSubmit}>
                     <label>First Name</label>
                     <input id="firstName" name="firstName" type="text" onChange={change} value={firstName} />
@@ -106,26 +118,3 @@ const UserSignUp = () => {
     );
 }
 export default UserSignUp;
-
-const ErrorsDisplay = ({errors}) => {
-    let errorsDisplay = null;
-
-    if (errors.length) {
-        errorsDisplay = (
-            <div>
-                <h2 className="validation--errors--label">Validation errors</h2>
-                <div className="validation-errors">
-                    <ul>
-                        {errors.map((error, i) => {
-                            return (
-                                <li key={i}>{error}</li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
-        );
-    }
-
-    return errorsDisplay;
-}
