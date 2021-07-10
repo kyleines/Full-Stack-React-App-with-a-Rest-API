@@ -1,34 +1,52 @@
+
+// import modules
 import React, {useState, useContext, useEffect} from "react";
 import {useHistory, useParams} from "react-router-dom";
+import ValidationErrors from "./ValidationErrors";
 import Context from "../Context";
 
+// handles updates to courses
 const UpdateCourse = () => {
 
+    // data
     const context = useContext(Context.AppContext);
     const signedIn = context.authedUser;
 
+    // url manipulation
     const history = useHistory();
     const {id} = useParams();
 
+    // required data for database persistence
     const [title, setTitle] = useState("");
     const [description, setDesc] = useState("");
     const userId = signedIn.id;
 
+    // optional data
     const [estimatedTime, setTime] = useState("");
     const [materialsNeeded, setMaterials] = useState("");
 
+    // errors array for field validation
     const [errors, setErrors] = useState([]);
 
+    // fetches course data
     useEffect(() => {
         context.data.getCourseDetails(id)
             .then(res => {
-                setTitle(res.title);
-                setDesc(res.description);
-                setTime(res.estimatedTime);
-                setMaterials(res.materialsNeeded);
+                if (!res) {
+                    history.push("/notfound");
+                // only authorized users (courses' creators) can update courses
+                } else if (res && res.userId === userId) {
+                    setTitle(res.title);
+                    setDesc(res.description);
+                    setTime(res.estimatedTime);
+                    setMaterials(res.materialsNeeded);
+                } else {
+                    history.push("/forbidden");
+                }
             })
-    }, [id, context.data]);
+    }, [id, userId, context.data, history]);
 
+    // sets state from html input fields
     const change = (e) => {
         const value = e.target.value;
 
@@ -53,6 +71,7 @@ const UpdateCourse = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // course data to be persisted to database
         const course = {
             title,
             description,
@@ -61,7 +80,9 @@ const UpdateCourse = () => {
             userId
         };
 
+        // updating courses restricted to authenticated users only
         if (signedIn) {
+            // posts data to database
             context.data.updateCourse(course, id, signedIn.emailAddress, signedIn.password)
                 .then(errors => {
                     if (errors.length) {
@@ -70,19 +91,21 @@ const UpdateCourse = () => {
                         history.push(`/courses/${id}`);
                     }
                 })
+                .catch(() => history.push("/error"));
         }
     }
 
+    // returns user to p
     const handleCancel = (e) => {
         e.preventDefault();
-        history.push("/");
+        history.goBack();
     }
 
     return (
         <main>
             <div className="wrap">
                 <h2>Update Course</h2>
-                <ErrorsDisplay errors={errors} />
+                <ValidationErrors errors={errors} />
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         <div>
@@ -110,24 +133,3 @@ const UpdateCourse = () => {
     );
 }
 export default UpdateCourse;
-
-const ErrorsDisplay = ({errors}) => {
-    let errorsDisplay = null;
-
-    if (errors.length) {
-        errorsDisplay = (
-            <div className="validation--errors">
-                <h3>Validation errors</h3>
-                <ul>
-                    {errors.map((error, i) => {
-                        return (
-                            <li key={i}>{error}</li>
-                        );
-                    })}
-                </ul>
-            </div>
-        );
-    }
-
-    return errorsDisplay;
-}
