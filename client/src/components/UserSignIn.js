@@ -1,16 +1,27 @@
+
+// import modules
 import React, {useState, useContext} from "react";
 import {Link, useHistory} from "react-router-dom";
+import ValidationErrors from "./ValidationErrors";
 import Context from "../Context";
 
+// authenticates existing user
 const UserSignIn = () => {
 
+    // data
     const context = useContext(Context.AppContext);
+
+    // url manipulation
     const history = useHistory();
 
+    // state variables
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
+
+    // errors array for field validation
     const [errors, setErrors] = useState([]);
 
+    // sets state from html input fields
     const change = (e) => {
         const value = e.target.value;
 
@@ -29,21 +40,20 @@ const UserSignIn = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // fetches user data
         context.actions.signIn(emailAddress, password)
             .then(user => {
                 if (user === null) {
                     setErrors(["Sign-in was unsuccessful"]);
                 } else {
-                    console.log("Sign-in was successful!")
-                    history.push("/");
+                    const {from} = history.location.state || {from: history.goBack()};
+                    history.push(from);
                 }
             })
-            .catch(error => {
-                console.log(error);
-                history.push("/error");
-            });
+            .catch(() => history.push("/error"));
     }
 
+    // returns user to home "/" route
     const handleCancel = (e) => {
         e.preventDefault();
         history.push("/");
@@ -53,7 +63,7 @@ const UserSignIn = () => {
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
-                <ErrorsDisplay errors={errors} />
+                <ValidationErrors errors={errors} />
                 <form onSubmit={handleSubmit}>
                     <label>Email Address</label>
                     <input id="emailAddress" name="emailAddress" type="email" onChange={change} value={emailAddress} />
@@ -68,26 +78,3 @@ const UserSignIn = () => {
     );
 }
 export default UserSignIn;
-
-const ErrorsDisplay = ({errors}) => {
-    let errorsDisplay = null;
-
-    if (errors.length) {
-        errorsDisplay = (
-            <div>
-                <h2 className="validation--errors--label">Validation errors</h2>
-                <div className="validation-errors">
-                    <ul>
-                        {errors.map((error, i) => {
-                            return (
-                                <li key={i}>{error}</li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
-        );
-    }
-
-    return errorsDisplay;
-}
