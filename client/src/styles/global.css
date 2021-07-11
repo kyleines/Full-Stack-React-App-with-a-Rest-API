@@ -7,20 +7,25 @@ html {
 }
 body {
     font-family: 'Work Sans', sans-serif;
+    background: rgb(45, 45, 45);
+    color: #fff;
 }
 h2 {
+    color: #fff;
+    text-shadow: 2px 2px 4px #000000;   
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
 p {
+    color: #fff;
     font-weight: 300;
     margin-bottom: 1.5rem;
     line-height: 1.5;
     hyphens: auto;
 }
 a {
-    color: #939;
+    color: #8158c2;
     text-decoration: none;
 }
 .wrap {
@@ -29,10 +34,13 @@ a {
     padding: 0 1rem;
 }
 header {
-    background: #57496e;
+    background: rgb(50, 50, 50);
     color: #fff;
+    position: sticky;
+    top: 0;
     padding: 1rem 0;
     margin-bottom: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .header--flex {
     display: flex;
@@ -47,7 +55,7 @@ header li {
     font-size: .8rem;
 }
 header nav a {
-    color: #dbd;
+    color: #8158c2;
 }
 header nav a:hover {
     color: #fff;
@@ -62,11 +70,17 @@ header nav a:hover {
     margin-left: .5rem;
 }
 .course--module {
-    background: #7c689b;
+    background: rgb(50, 50, 50); 
     border-radius: .5rem;
+    border: 1px solid #8c789b;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     display: block;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.course--module:hover {
+    border-radius: 0;
+    outline: 1px solid #7c689b;
 }
 .course--label {
     color: #fff;
@@ -78,25 +92,29 @@ header nav a:hover {
     color: #fff;
     font-weight: 700;
     font-size: 1.25rem;
+    text-shadow: 2px 2px 4px #000000;
 }
 .course--add--module {
-    background: #ddd9e4;
-    color: #57496e;
+    background: #47395e;
+    color: #fff;
+    border: none;
     font-weight: 300;
     font-size: 1.25rem;
+    text-shadow: 2px 2px 4px #000000;
 }
 .course--add--title .add {
     width: 20px;
     height: auto;
     margin-right: 5px;
-    fill: #57496e;
+    fill: #fff;  
+    filter: drop-shadow(2px 2px 4px #000000);
 }
 .course--detail--title {
     padding-bottom: .25rem;
     border-bottom: 1px solid #888;
     margin: 3rem 0 .5rem;
     font-size: .9rem;
-    color: #555;
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -104,27 +122,32 @@ header nav a:hover {
     font-size: 2rem;
     margin-bottom: .5rem;
     font-weight: 700;
-    color: #47395e;
+    color: #7c689b;
+    text-shadow: 1px 1px 1px #000000;
 }
 .course--detail--list {
     font-weight: 300;
     margin: 0 0 1.5rem 1rem;
     line-height: 1.5;
+    color: #fff;
 }
 .actions--bar {
-    background: #e9e5f0;
+    background: rgb(30, 30, 30);
     padding: 1rem 0;
     margin: -2rem 0 2rem;
 }
 .validation--errors {
-    background: #e9e5f0;
+    background: #7c689b;
     padding: 1rem;
     border-radius: .5rem;
     margin-bottom: 2.5rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .validation--errors h3 {
-    color: #800;
-    font-size: 1.25rem;
+    color: rgb(255, 20, 20);
+    text-shadow: 1px 1px 1px #000000; 
+    font-size: 1.5rem;
+    font-weight: 675;
     margin-bottom: .5rem;
 }
 .validation--errors ul {
@@ -133,6 +156,8 @@ header nav a:hover {
     line-height: 1.25;
 }
 .validation--errors li {
+    color: #fff;
+    text-shadow: .5px .5px 1px #000000;
     margin-bottom: .5rem;
 }
 .validation--errors li:last-child {
@@ -151,17 +176,20 @@ label {
     display: block;
     font-weight: 300;
     margin-bottom: .25rem;
+    color: #fff;
 }
 input, textarea {
+    background: rgb(50, 50, 50);
     display: block;
     width: 100%;
-    color: #332a40;
+    color: #fff;
     border-radius: .5rem;
-    border: 1px solid #8c789b;
+    border: 2px solid #8c789b;
     padding: .5rem;
     margin-bottom: 1rem;
     font-family: 'Work Sans', sans-serif;
     font-size: .8rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 textarea {
     min-height: 300px;
@@ -179,6 +207,7 @@ textarea {
     border-radius: .5rem;
     font-weight: bold;
     transition: background 0.2s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .button:last-child {
     margin-bottom: 0;
@@ -190,18 +219,20 @@ textarea {
 .button-secondary {
     color: #7c689b;
     background: none;
-    box-shadow: 0 0 0 2px #7c689b inset;
+    box-shadow: 0 0 0 2px #7c689b inset, 
+        0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: box-shadow 0.2s, color 0.2s;
 }
 .button-secondary:hover {
     color: #63537d;
-    box-shadow: 0 0 0 2px #63537d inset;
+    box-shadow: 0 0 0 2px #63537d inset, 
+        0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
 }
 input:focus, button:focus, .button:focus, textarea:focus {
     border: none;
     border-radius: 0;
-    outline: 2px solid #332a40;
+    outline: 2px solid #7c689b;
 }
 
 @media screen and (min-width: 600px) {
