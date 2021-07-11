@@ -1,6 +1,8 @@
-# School Database REST API
+# Full Stack React App with a Rest API
 
-### Welcome to my School Database REST API for the Team Treehouse: FSJS Techdegree - Unit 9 Project.
+### Welcome to the REST API for my Full Stack React App for the Team Treehouse: FSJS Techdegree - Unit 10 Project.
+
+*\* I created this project, the School Database REST API, previously for the Team Treehouse: FSJS Techdegree - [Unit 9 Project](https://github.com/kyleines/School-Database-REST-API) \**
 
 In this project, I created a REST API using Express. This API provides a way to administer a school database containing information about users and courses. \
 Users can interact with the database to create new courses, retrieve information on existing courses, and update or delete existing courses. \
